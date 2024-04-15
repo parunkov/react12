@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 import './App.scss'
-import RadioTest from './components/radioTest/RadioTest';
+import RadioTest, { IradioProps } from './components/radioTest/RadioTest';
+// import { Button } from '@mui/material';
+
+interface IappState {
+  time: number;
+  curretIndex: number;
+  test: IradioProps[];
+}
 
 function App() {
-  const initialState = {
+  const initialState: IappState = {
     time: 0,
     curretIndex: 0,
     test: [
@@ -25,6 +32,7 @@ function App() {
         id: 3,
         type: 'input',
         question: 'Напишите ответ на вопрос',
+        answers: [],
         result: null
       },
       {
@@ -37,11 +45,26 @@ function App() {
     ]
   };
 
+  // const readTestValue = () => {
+  //   console.log('callback');
+  //   return 'callback';
+  // }
+
+  const onButtonClick = (value: string) => {
+    console.log(appState.curretIndex);
+    const newState: IappState = {...appState};
+    newState.curretIndex += 1;
+    console.log(value);
+    newState.test[appState.curretIndex].result = value;
+    setAppState(newState);
+    console.log(appState);
+  }
+
   const [appState, setAppState] = useState(initialState);
   useEffect(() => {
     console.log(appState.curretIndex);
-    console.log(appState.test[appState.curretIndex]);
-    
+    // console.log(appState.test[appState.curretIndex]);
+
   }, [appState.curretIndex]);
 
   return (
@@ -52,9 +75,10 @@ function App() {
       </div>
       <div className="progressWrapper"></div>
       <div className="testWrapper">
-        {appState.test[appState.curretIndex]?.type === 'radio' ? <RadioTest 
-          question={appState.test[appState.curretIndex]?.question} 
-          answers={appState.test[appState.curretIndex].answers}/> : ''}
+        {appState.test[appState.curretIndex]?.type === 'radio' ? <RadioTest
+          question={appState.test[appState.curretIndex].question}
+          answers={appState.test[appState.curretIndex].answers} 
+          callback={onButtonClick}/> : ''}
       </div>
     </>
   )
