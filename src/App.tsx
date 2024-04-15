@@ -45,27 +45,19 @@ function App() {
     ]
   };
 
-  // const readTestValue = () => {
-  //   console.log('callback');
-  //   return 'callback';
-  // }
-
   const onButtonClick = (value: string) => {
-    console.log(appState.curretIndex);
     const newState: IappState = {...appState};
     newState.curretIndex += 1;
-    console.log(value);
     newState.test[appState.curretIndex].result = value;
     setAppState(newState);
     console.log(appState);
   }
 
   const [appState, setAppState] = useState(initialState);
-  useEffect(() => {
-    console.log(appState.curretIndex);
-    // console.log(appState.test[appState.curretIndex]);
-
-  }, [appState.curretIndex]);
+  // useEffect(() => {
+  //   console.log(appState.curretIndex);
+  //   // console.log(appState.test[appState.curretIndex]);
+  // }, [appState.curretIndex]);
 
   return (
     <>
