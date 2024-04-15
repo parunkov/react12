@@ -1,16 +1,8 @@
 import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { ChangeEvent, useState } from "react";
+import { ItestData } from "../../App";
 
-export interface IradioProps {
-    id?: number;
-    question: string;
-    answers: string[];
-    type?: string;
-    result?: string | null;
-    callback?: (value: string) => void;
-}
-
-function RadioTest({ question, answers, callback }: IradioProps) {
+function RadioTest({ question, answers, callback }: ItestData) {
     const [value, setValue] = useState(answers[0]);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +11,6 @@ function RadioTest({ question, answers, callback }: IradioProps) {
 
     const onAnswerClick = () => {
         if (!callback) return;
-        console.log(value);
         callback(value);
     }
 

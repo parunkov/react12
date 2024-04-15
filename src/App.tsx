@@ -1,12 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.scss'
-import RadioTest, { IradioProps } from './components/radioTest/RadioTest';
-// import { Button } from '@mui/material';
+import RadioTest from './components/radioTest/RadioTest';
+import CheckboxTest from './components/checkboxTest/CheckboxTest';
+
+export interface ItestData {
+  id?: number;
+  question: string;
+  answers: string[];
+  type?: string;
+  result?: string | string[] | null;
+  callback?: (value: string | string[]) => void;
+}
 
 interface IappState {
   time: number;
   curretIndex: number;
-  test: IradioProps[];
+  test: ItestData[];
 }
 
 function App() {
@@ -45,9 +54,9 @@ function App() {
     ]
   };
 
-  const onButtonClick = (value: string) => {
-    const newState: IappState = {...appState};
-    newState.curretIndex += 1;
+  const onButtonClick = (value: string | string[]) => {
+    const newState: IappState = { ...appState };
+    // newState.curretIndex += 1;
     newState.test[appState.curretIndex].result = value;
     setAppState(newState);
     console.log(appState);
@@ -69,8 +78,12 @@ function App() {
       <div className="testWrapper">
         {appState.test[appState.curretIndex]?.type === 'radio' ? <RadioTest
           question={appState.test[appState.curretIndex].question}
-          answers={appState.test[appState.curretIndex].answers} 
-          callback={onButtonClick}/> : ''}
+          answers={appState.test[appState.curretIndex].answers}
+          callback={onButtonClick} /> : ''}
+        {appState.test[appState.curretIndex]?.type === 'checkbox' ? <CheckboxTest
+          question={appState.test[appState.curretIndex].question}
+          answers={appState.test[appState.curretIndex].answers}
+          callback={onButtonClick} /> : ''}
       </div>
     </>
   )
