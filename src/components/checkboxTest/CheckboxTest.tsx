@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, FormLabel } from "@mui/material";
 import { ItestData } from "../../App";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 function CheckboxTest({ question, answers, callback }: ItestData) {
 
@@ -9,24 +9,26 @@ function CheckboxTest({ question, answers, callback }: ItestData) {
         initialState[item] = false;
     });
     const [values, setValues] = useState(initialState);
-    console.log('values', values)
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.checked);
-        
-        // setChecked(event.target.checked);
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const wrapper = event.target.closest('.testCheckbox') as HTMLElement;
+        const newValues = {...values};
+        if (!wrapper.dataset.item) return;
+        newValues[wrapper.dataset.item] = event.target.checked;
+        setValues(newValues)
       };
 
     const onAnswerClick = () => {
         if (!callback) return;
-        // callback('value');
+        const data = Object.keys(values).filter((item) => values[item]);
+        callback(data);
     }
 
     return (
         <>
             <FormGroup>
                 <FormLabel id="demo-checkbox-group-label">{question}</FormLabel>
-                {answers.map((item) => <><p>{values[item].toString()}</p><FormControlLabel key={item} className="testCheckbox" control={<Checkbox checked={values[item]?.checked} onChange={handleChange} />} label={item} /></>)}
+                {answers.map((item) => <FormControlLabel key={item} className="testCheckbox" data-item={item} control={<Checkbox checked={values[item]} onChange={handleChange} />} label={item} />)}
             </FormGroup>
             <div className="buttonWrapper">
                 <Button variant="contained" onClick={onAnswerClick}>Ответить</Button>

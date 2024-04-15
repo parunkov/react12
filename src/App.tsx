@@ -57,6 +57,7 @@ function App() {
   const onButtonClick = (value: string | string[]) => {
     const newState: IappState = { ...appState };
     // newState.curretIndex += 1;
+    newState.curretIndex = 1;
     newState.test[appState.curretIndex].result = value;
     setAppState(newState);
     console.log(appState);
