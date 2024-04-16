@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.scss'
 import RadioTest from './components/radioTest/RadioTest';
 import CheckboxTest from './components/checkboxTest/CheckboxTest';
@@ -26,7 +26,7 @@ interface IappState {
 
 function App() {
   const initialState: IappState = {
-    time: 12,
+    time: 120,
     usedTime: 0,
     curretIndex: 0,
     test: [
@@ -95,24 +95,31 @@ function App() {
   }
 
   let time: number = appState.usedTime;
-    const checkTime = setInterval(() => {
+  const checkTime = () => {
+    setTimeout(() => {
       const date = new Date(time);
       const minutes = formatTime(date.getMinutes());
       const seconds = formatTime(date.getSeconds());
       const newState: IappState = { ...appState };
       if (time >= appState.time * 1000) {
-        clearInterval(checkTime);
+        // clearInterval(checkTime);
         newState.curretIndex = appState.test.length;
       }
       const clock = document.querySelector('.clock');
       if (clock) clock.innerHTML = `${minutes} : ${seconds}`
       time += 1000;
       newState.usedTime = time;
-      if (appState.usedTime !== time && time <= appState.time * 1000) setAppState(newState);
-    }, 1000)
+      if (appState.usedTime !== time && time <= appState.time * 1000) {
+          setAppState(newState);
+          // localStorage.setItem('madsoft24test', JSON.stringify(appState));
+          checkTime();
+      }
+    }, 1000);
+  }
 
-  // useEffect(() => {
-  // }, []);
+  useEffect(() => {
+    checkTime();
+  }, []);
 
   const onShowButtonClick = () => {
     const results = appState.test.map((item, index) => `Вопрос ${index + 1}: ${item.result?.toString()}`);
