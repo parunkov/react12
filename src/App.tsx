@@ -19,15 +19,13 @@ export interface ItestData {
 
 interface IappState {
   time: number;
-  usedTime: number;
   curretIndex: number;
   test: ItestData[];
 }
 
 function App() {
   const initialState: IappState = {
-    time: 120,
-    usedTime: 0,
+    time: 12,
     curretIndex: 0,
     test: [
       {
@@ -76,14 +74,16 @@ function App() {
       newState.test[appState.curretIndex].result = value;
       newState.test[appState.curretIndex].active = false;
       newState.test[appState.curretIndex].selected = true;
-      setAppState(newState);
     }
     if (newState.test[appState.curretIndex + 1]) {
       newState.test[appState.curretIndex + 1].active = true;
     }
+    setAppState(newState);
+    localStorage.setItem('madsoft24test', JSON.stringify(newState));
   }
 
   const savedState: IappState | null = localStorage.getItem('madsoft24test') ? JSON.parse(localStorage.getItem('madsoft24test') as string) as IappState : null;
+  const savedTime: number = +(localStorage.getItem('madsoft24time') as string) ?? 0;
 
   const [appState, setAppState] = useState(savedState ?? initialState);
 
@@ -94,25 +94,30 @@ function App() {
     return time;
   }
 
-  let time: number = appState.usedTime;
+  let time: number = savedTime;
   const checkTime = () => {
     setTimeout(() => {
       const date = new Date(time);
       const minutes = formatTime(date.getMinutes());
       const seconds = formatTime(date.getSeconds());
-      const newState: IappState = { ...appState };
-      if (time >= appState.time * 1000) {
-        // clearInterval(checkTime);
-        newState.curretIndex = appState.test.length;
-      }
+      // const newState: IappState = { ...appState };
+      // if (time >= appState.time * 1000) {
+      //   // clearInterval(checkTime);
+      //   // newState.curretIndex = appState.test.length;
+      // }
       const clock = document.querySelector('.clock');
       if (clock) clock.innerHTML = `${minutes} : ${seconds}`
-      time += 1000;
-      newState.usedTime = time;
-      if (appState.usedTime !== time && time <= appState.time * 1000) {
-          setAppState(newState);
-          // localStorage.setItem('madsoft24test', JSON.stringify(appState));
-          checkTime();
+      const newTime = time + 1000;
+      console.log(time);
+
+      // newState.usedTime = time;
+      
+      if (newTime > time && newTime <= appState.time * 1000) {
+        time = newTime;
+        localStorage.setItem('madsoft24time', newTime.toString());
+        // setAppState(newState);
+        // localStorage.setItem('madsoft24test', JSON.stringify(appState));
+        checkTime();
       }
     }, 1000);
   }
@@ -121,24 +126,31 @@ function App() {
     checkTime();
   }, []);
 
+  // useEffect(() => {
+  //   console.log(time);
+
+  // }, [time]);
+
   const onShowButtonClick = () => {
     const results = appState.test.map((item, index) => `Вопрос ${index + 1}: ${item.result?.toString()}`);
     alert(results.join('\r\n'));
   }
 
   const onClearButtonClick = () => {
+    localStorage.removeItem('madsoft24test');
+    localStorage.removeItem('madsoft24time');
     document.location.reload();
   }
   return (
     <>
       <div className="titleWrapper">
         <h1>Тестирование</h1>
-        <div className="clock">00 : 00</div>
+        <div className="clock"></div>
       </div>
       <div className="progressWrapper">
         {appState.test.map((item) => <div key={item.id} className={`progressItem ${item.active ? 'active' : ''} ${item.selected ? 'selected' : ''}`}></div>)}
       </div>
-      {appState.curretIndex >= appState.test.length && <>
+      {(appState.curretIndex >= appState.test.length || time >= appState.time * 1000) && <>
         <p>Тестирование окончено</p>
         <span className="showBtn"><Button variant="contained" onClick={onShowButtonClick}>Показать результаты</Button></span>
         <Button variant="contained" onClick={onClearButtonClick}>Начать заново</Button>
