@@ -24,15 +24,18 @@ function TextareaTest({ question, callback }: ItestData) {
         <>
             <FormControl>
                 <FormLabel id="demo-input-group-label">{question}</FormLabel>
-                <TextField id="basic" className="testInput" label="Ответ" variant="outlined" onChange={handleChange} />
-                <TextField
-                    onChange={handleChange}
-                    id="multiline"
-                    className="testInput"
-                    label="Решение"
-                    multiline
-                    rows={4}
-                />
+                <div className="testInput">
+                    <TextField id="basic" label="Ответ" variant="outlined" onChange={handleChange} />
+                </div>
+                <div className="testInput">
+                    <TextField
+                        onChange={handleChange}
+                        id="multiline"
+                        label="Решение"
+                        multiline
+                        rows={4}
+                    />
+                </div>
             </FormControl>
             <div className="buttonWrapper">
                 <Button variant="contained" onClick={onAnswerClick}>Ответить</Button>

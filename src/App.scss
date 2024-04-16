@@ -44,9 +44,11 @@
 .read-the-docs {
   color: #888;
 }
+
 .MuiFormControl-root {
   width: 100%;
 }
+
 .progressWrapper {
   display: flex;
   gap: 10px;
@@ -77,5 +79,9 @@
 }
 
 .testInput {
-  margin-top: 10px !important;
+  margin-top: 10px;
+}
+
+.showBtn {
+  margin-right: 10px;
 }

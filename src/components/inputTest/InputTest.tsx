@@ -18,7 +18,9 @@ function InputTest({ question, callback }: ItestData) {
         <>
             <FormControl>
                 <FormLabel id="demo-input-group-label">{question}</FormLabel>
-                <TextField id="outlined-basic" className="testInput" variant="outlined" onChange={handleChange}/>
+                <div className="testInput">
+                    <TextField id="outlined-basic" variant="outlined" onChange={handleChange}/>
+                </div>
             </FormControl>
             <div className="buttonWrapper">
                 <Button variant="contained" onClick={onAnswerClick}>Ответить</Button>

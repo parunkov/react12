@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.scss'
 import RadioTest from './components/radioTest/RadioTest';
 import CheckboxTest from './components/checkboxTest/CheckboxTest';
 import InputTest from './components/inputTest/InputTest';
 import TextareaTest from './components/textareaTest/TextareaTest';
+import { Button } from '@mui/material';
 
 export interface ItestData {
   id?: number;
@@ -20,16 +21,12 @@ interface IappState {
   time: number;
   curretIndex: number;
   test: ItestData[];
-  progress: number;
-  buffer: number;
 }
 
 function App() {
   const initialState: IappState = {
-    time: 0,
+    time: 12,
     curretIndex: 0,
-    progress: 0,
-    buffer: 0,
     test: [
       {
         id: 1,
@@ -73,13 +70,11 @@ function App() {
   const onButtonClick = (value: string | string[]) => {
     const newState: IappState = { ...appState };
     newState.curretIndex += 1;
-    // newState.curretIndex = 3;
     if (newState.test[appState.curretIndex]) {
       newState.test[appState.curretIndex].result = value;
       newState.test[appState.curretIndex].active = false;
       newState.test[appState.curretIndex].selected = true;
       setAppState(newState);
-      console.log(appState);
     }
     if (newState.test[appState.curretIndex + 1]) {
       newState.test[appState.curretIndex + 1].active = true;
@@ -87,20 +82,55 @@ function App() {
   }
 
   const [appState, setAppState] = useState(initialState);
-  // useEffect(() => {
-  //   console.log(appState.curretIndex);
-  //   // console.log(appState.test[appState.curretIndex]);
-  // }, [appState.curretIndex]);
 
+  useEffect(() => {
+    let time: number = 0;
+    function formatTime(time: number) {
+      if (time < 10) {
+        return '0' + time;
+      }
+      return time;
+    }
+
+    const checkTime = setInterval(() => {
+      const date = new Date(time);
+      const minutes = formatTime(date.getMinutes());
+      const seconds = formatTime(date.getSeconds());
+      if (time >= appState.time * 1000) {
+        clearInterval(checkTime);
+        const newState: IappState = { ...appState };
+        newState.curretIndex = appState.test.length;
+        setAppState(newState);
+      }
+      const clock = document.querySelector('.clock');
+      if (clock) clock.innerHTML = `${minutes} : ${seconds}`
+      time += 1000;
+    }, 1000)
+  }, []);
+
+  const onShowButtonClick = () => {
+    const results = appState.test.map((item, index) =>`Вопрос ${index + 1}: ${item.result?.toString()}`);
+    alert(results.join('\r\n'));
+  }
+
+  const onClearButtonClick = () => {
+    document.location.reload();
+  }
   return (
     <>
       <div className="titleWrapper">
         <h1>Тестирование</h1>
-        <div className="clock"></div>
+        <div className="clock">00 : 00</div>
       </div>
       <div className="progressWrapper">
         {appState.test.map((item) => <div key={item.id} className={`progressItem ${item.active ? 'active' : ''} ${item.selected ? 'selected' : ''}`}></div>)}
       </div>
+      {appState.curretIndex >= appState.test.length && <>
+        <p>Тестирование окончено</p>
+        <span className="showBtn"><Button variant="contained"onClick={onShowButtonClick}>Показать результаты</Button></span>
+        <Button variant="contained" onClick={onClearButtonClick}>Начать заново</Button>
+      </>}
+
       <div className="testWrapper">
         {appState.test[appState.curretIndex]?.type === 'radio' ? <RadioTest
           question={appState.test[appState.curretIndex].question}
