@@ -1,8 +1,9 @@
 #root {
   max-width: 1280px;
+  min-width: 600px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  text-align: left;
 }
 
 .logo {
@@ -42,6 +43,28 @@
 
 .read-the-docs {
   color: #888;
+}
+.MuiFormControl-root {
+  width: 100%;
+}
+.progressWrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.progressItem {
+  flex-grow: 1;
+  height: 10px;
+  background: gray;
+
+  &.selected {
+    background: black;
+  }
+
+  &.active {
+    background: red;
+  }
 }
 
 .testWrapper {
