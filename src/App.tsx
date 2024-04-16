@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.scss'
 import RadioTest from './components/radioTest/RadioTest';
 import CheckboxTest from './components/checkboxTest/CheckboxTest';
+import InputTest from './components/inputTest/InputTest';
 
 export interface ItestData {
   id?: number;
@@ -57,7 +58,7 @@ function App() {
   const onButtonClick = (value: string | string[]) => {
     const newState: IappState = { ...appState };
     // newState.curretIndex += 1;
-    newState.curretIndex = 1;
+    newState.curretIndex = 2;
     newState.test[appState.curretIndex].result = value;
     setAppState(newState);
     console.log(appState);
@@ -82,6 +83,10 @@ function App() {
           answers={appState.test[appState.curretIndex].answers}
           callback={onButtonClick} /> : ''}
         {appState.test[appState.curretIndex]?.type === 'checkbox' ? <CheckboxTest
+          question={appState.test[appState.curretIndex].question}
+          answers={appState.test[appState.curretIndex].answers}
+          callback={onButtonClick} /> : ''}
+          {appState.test[appState.curretIndex]?.type === 'input' ? <InputTest
           question={appState.test[appState.curretIndex].question}
           answers={appState.test[appState.curretIndex].answers}
           callback={onButtonClick} /> : ''}
