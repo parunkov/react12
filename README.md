@@ -1,4 +1,12 @@
-# React + TypeScript + Vite
+# Тестовое задание React, TypeScript
+
+## Задание
+https://docs.google.com/forms/d/e/1FAIpQLSeoTTzp1WpoGkVtHS59Up4N0MqG4VNHY98SY27M6_O8B-jT3g/viewform
+
+## Демо-страница
+https://parunkov.github.io/react12/
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
