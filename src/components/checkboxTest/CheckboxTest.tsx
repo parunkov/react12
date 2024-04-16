@@ -27,7 +27,9 @@ function CheckboxTest({ question, answers, callback }: ItestData) {
     return (
         <>
             <FormGroup>
-                <FormLabel id="demo-checkbox-group-label">{question}</FormLabel>
+                <div className="label">
+                    <FormLabel id="demo-checkbox-group-label">{question}</FormLabel>
+                </div>
                 {answers.map((item) => <FormControlLabel key={item} className="testCheckbox" data-item={item} control={<Checkbox checked={values[item]} onChange={handleChange} />} label={item} />)}
             </FormGroup>
             <div className="buttonWrapper">

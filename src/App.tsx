@@ -4,7 +4,7 @@ import RadioTest from './components/radioTest/RadioTest';
 import CheckboxTest from './components/checkboxTest/CheckboxTest';
 import InputTest from './components/inputTest/InputTest';
 import TextareaTest from './components/textareaTest/TextareaTest';
-import { Button } from '@mui/material';
+import { Button, ThemeProvider, createTheme } from '@mui/material';
 
 export interface ItestData {
   id?: number;
@@ -24,8 +24,16 @@ interface IappState {
 }
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#b92a35',
+      }
+    },
+  });
+
   const initialState: IappState = {
-    time: 12,
+    time: 120,
     curretIndex: 0,
     test: [
       {
@@ -102,9 +110,8 @@ function App() {
       const minutes = formatTime(date.getMinutes());
       const seconds = formatTime(date.getSeconds());
       const clock = document.querySelector('.clock');
-      if (clock) clock.innerHTML = `${minutes} : ${seconds}`
+      if (clock) clock.innerHTML = `${minutes}:${seconds}`
       const newTime = time + 1000;
-      console.log(time);
       if (newTime > time && newTime <= appState.time * 1000) {
         time = newTime;
         localStorage.setItem('madsoft24time', newTime.toString());
@@ -132,6 +139,7 @@ function App() {
   }
   return (
     <>
+    <ThemeProvider theme={theme}>
       <div className="titleWrapper">
         <h1>Тестирование</h1>
         <div className="clock"></div>
@@ -140,7 +148,7 @@ function App() {
         {appState.test.map((item) => <div key={item.id} className={`progressItem ${item.active ? 'active' : ''} ${item.selected ? 'selected' : ''}`}></div>)}
       </div>
       {(appState.curretIndex >= appState.test.length || time >= appState.time * 1000) && <>
-        <p>Тестирование окончено</p>
+        <p className='endText'>Тестирование окончено</p>
         <span className="showBtn"><Button variant="contained" onClick={onShowButtonClick}>Показать результаты</Button></span>
         <Button variant="contained" onClick={onClearButtonClick}>Начать заново</Button>
       </>}      
@@ -163,6 +171,7 @@ function App() {
           answers={appState.test[appState.curretIndex].answers}
           callback={onButtonClick} /> : ''}
       </div>}
+      </ThemeProvider>
     </>
   )
 }

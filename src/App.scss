@@ -1,6 +1,5 @@
 #root {
-  max-width: 1280px;
-  min-width: 600px;
+  width: 600px;
   margin: 0 auto;
   padding: 2rem;
   text-align: left;
@@ -49,6 +48,13 @@
   width: 100%;
 }
 
+.label .MuiFormLabel-root,
+.endText {
+  font-size: 18px;
+  font-weight: 700;
+  color: #213547;
+}
+
 .progressWrapper {
   display: flex;
   gap: 10px;
@@ -58,15 +64,34 @@
 .progressItem {
   flex-grow: 1;
   height: 10px;
-  background: gray;
+  background: #e1e1e1;
 
   &.selected {
-    background: black;
+    background: #213547;
   }
 
   &.active {
-    background: red;
+    background: #b92a35;
   }
+}
+
+.titleWrapper {
+  display: flex;
+
+  h1 {
+    margin: 0;
+  }
+
+  margin-bottom: 20px;
+}
+
+.clock {
+  padding: 8px 20px;
+  margin-left: 10px;
+  font-size: 32px;
+  line-height: 32px;
+  border: 2px solid #213547;
+  border-radius: 5px;
 }
 
 .testWrapper {

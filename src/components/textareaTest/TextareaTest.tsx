@@ -23,7 +23,9 @@ function TextareaTest({ question, callback }: ItestData) {
     return (
         <>
             <FormControl>
-                <FormLabel id="demo-input-group-label">{question}</FormLabel>
+                <div className="label">
+                    <FormLabel id="demo-input-group-label">{question}</FormLabel>
+                </div>
                 <div className="testInput">
                     <TextField id="basic" label="Ответ" variant="outlined" onChange={handleChange} />
                 </div>

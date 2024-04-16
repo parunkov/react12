@@ -17,7 +17,9 @@ function RadioTest({ question, answers, callback }: ItestData) {
     return (
         <>
             <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">{question}</FormLabel>
+                <div className="label">
+                    <FormLabel id="demo-radio-buttons-group-label">{question}</FormLabel>
+                </div>
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     value={value}
