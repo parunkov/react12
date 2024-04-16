@@ -86,6 +86,7 @@ function App() {
   const savedTime: number = +(localStorage.getItem('madsoft24time') as string) ?? 0;
 
   const [appState, setAppState] = useState(savedState ?? initialState);
+  const [testVisible, setTestVisible] = useState(false);
 
   function formatTime(time: number) {
     if (time < 10) {
@@ -100,24 +101,17 @@ function App() {
       const date = new Date(time);
       const minutes = formatTime(date.getMinutes());
       const seconds = formatTime(date.getSeconds());
-      // const newState: IappState = { ...appState };
-      // if (time >= appState.time * 1000) {
-      //   // clearInterval(checkTime);
-      //   // newState.curretIndex = appState.test.length;
-      // }
       const clock = document.querySelector('.clock');
       if (clock) clock.innerHTML = `${minutes} : ${seconds}`
       const newTime = time + 1000;
       console.log(time);
-
-      // newState.usedTime = time;
-      
       if (newTime > time && newTime <= appState.time * 1000) {
         time = newTime;
         localStorage.setItem('madsoft24time', newTime.toString());
-        // setAppState(newState);
-        // localStorage.setItem('madsoft24test', JSON.stringify(appState));
         checkTime();
+        setTestVisible(true);
+      } else {
+        setTestVisible(false);
       }
     }, 1000);
   }
@@ -126,13 +120,8 @@ function App() {
     checkTime();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(time);
-
-  // }, [time]);
-
   const onShowButtonClick = () => {
-    const results = appState.test.map((item, index) => `Вопрос ${index + 1}: ${item.result?.toString()}`);
+    const results = appState.test.map((item, index) => `Вопрос ${index + 1}: ${item.result  ? item.result.toString() : 'Нет ответа'}`);
     alert(results.join('\r\n'));
   }
 
@@ -154,8 +143,8 @@ function App() {
         <p>Тестирование окончено</p>
         <span className="showBtn"><Button variant="contained" onClick={onShowButtonClick}>Показать результаты</Button></span>
         <Button variant="contained" onClick={onClearButtonClick}>Начать заново</Button>
-      </>}
-
+      </>}      
+      {(testVisible || time < appState.time * 1000) && 
       <div className="testWrapper">
         {appState.test[appState.curretIndex]?.type === 'radio' ? <RadioTest
           question={appState.test[appState.curretIndex].question}
@@ -173,7 +162,7 @@ function App() {
           question={appState.test[appState.curretIndex].question}
           answers={appState.test[appState.curretIndex].answers}
           callback={onButtonClick} /> : ''}
-      </div>
+      </div>}
     </>
   )
 }
