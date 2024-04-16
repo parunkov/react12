@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.scss'
 import RadioTest from './components/radioTest/RadioTest';
 import CheckboxTest from './components/checkboxTest/CheckboxTest';
@@ -19,6 +19,7 @@ export interface ItestData {
 
 interface IappState {
   time: number;
+  usedTime: number;
   curretIndex: number;
   test: ItestData[];
 }
@@ -26,6 +27,7 @@ interface IappState {
 function App() {
   const initialState: IappState = {
     time: 12,
+    usedTime: 0,
     curretIndex: 0,
     test: [
       {
@@ -81,35 +83,39 @@ function App() {
     }
   }
 
-  const [appState, setAppState] = useState(initialState);
+  const savedState: IappState | null = localStorage.getItem('madsoft24test') ? JSON.parse(localStorage.getItem('madsoft24test') as string) as IappState : null;
 
-  useEffect(() => {
-    let time: number = 0;
-    function formatTime(time: number) {
-      if (time < 10) {
-        return '0' + time;
-      }
-      return time;
+  const [appState, setAppState] = useState(savedState ?? initialState);
+
+  function formatTime(time: number) {
+    if (time < 10) {
+      return '0' + time;
     }
+    return time;
+  }
 
+  let time: number = appState.usedTime;
     const checkTime = setInterval(() => {
       const date = new Date(time);
       const minutes = formatTime(date.getMinutes());
       const seconds = formatTime(date.getSeconds());
+      const newState: IappState = { ...appState };
       if (time >= appState.time * 1000) {
         clearInterval(checkTime);
-        const newState: IappState = { ...appState };
         newState.curretIndex = appState.test.length;
-        setAppState(newState);
       }
       const clock = document.querySelector('.clock');
       if (clock) clock.innerHTML = `${minutes} : ${seconds}`
       time += 1000;
+      newState.usedTime = time;
+      if (appState.usedTime !== time && time <= appState.time * 1000) setAppState(newState);
     }, 1000)
-  }, []);
+
+  // useEffect(() => {
+  // }, []);
 
   const onShowButtonClick = () => {
-    const results = appState.test.map((item, index) =>`Вопрос ${index + 1}: ${item.result?.toString()}`);
+    const results = appState.test.map((item, index) => `Вопрос ${index + 1}: ${item.result?.toString()}`);
     alert(results.join('\r\n'));
   }
 
@@ -127,7 +133,7 @@ function App() {
       </div>
       {appState.curretIndex >= appState.test.length && <>
         <p>Тестирование окончено</p>
-        <span className="showBtn"><Button variant="contained"onClick={onShowButtonClick}>Показать результаты</Button></span>
+        <span className="showBtn"><Button variant="contained" onClick={onShowButtonClick}>Показать результаты</Button></span>
         <Button variant="contained" onClick={onClearButtonClick}>Начать заново</Button>
       </>}
 
